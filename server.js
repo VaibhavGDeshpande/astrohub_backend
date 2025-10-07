@@ -4,7 +4,7 @@ import path from 'path';
 import cors from 'cors'
 import { fileURLToPath } from 'url';
 import planetRoutes from './src/routes/planetRoutes.js';
-import { errorHandler, notFound } from './src/middleware/errorHandler.js';
+import { notFound } from './src/middleware/errorHandler.js';
 import connectDB from './src/config/db.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -43,7 +43,6 @@ app.use('/api/planets', planetRoutes);
 
 // Error handling middleware (must be last)
 app.use(notFound);
-app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
