@@ -15,15 +15,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-// Connect to MongoDB
-connectDB();
-
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors())
 
-// Serve static files (uploaded images and models)
+// Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Root route
@@ -38,15 +35,24 @@ app.get('/', (req, res) => {
   });
 });
 
-
 app.use('/api/planets', planetRoutes);
 
-// Error handling middleware (must be last)
+// Error handling middleware
 app.use(notFound);
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+// Start server ONLY after DB connection
+const startServer = async () => {
+  try {
+    await connectDB();  // Wait for DB connection
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+};
 
+startServer();
 
 export default app;
