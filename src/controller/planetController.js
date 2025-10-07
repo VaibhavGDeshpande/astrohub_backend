@@ -52,7 +52,6 @@ export const createPlanet = async (req, res, next) => {
     if (planetExists) {
       // Delete uploaded files
       if (req.files) {
-        if (req.files.image) fs.unlinkSync(req.files.image[0].path);
         if (req.files.model) fs.unlinkSync(req.files.model[0].path);
       }
       const error = new Error('Planet with this name already exists');
@@ -63,12 +62,6 @@ export const createPlanet = async (req, res, next) => {
     const planetData = {
       name
     };
-
-    // Add image path if uploaded
-    if (req.files && req.files.image) {
-      planetData.image = `/uploads/images/${req.files.image[0].filename}`;
-    }
-
     // Add model path if uploaded
     if (req.files && req.files.model) {
       planetData.model = `/uploads/models/${req.files.model[0].filename}`;
@@ -83,7 +76,6 @@ export const createPlanet = async (req, res, next) => {
   } catch (error) {
     // Delete uploaded files if error occurs
     if (req.files) {
-      if (req.files.image) fs.unlinkSync(req.files.image[0].path);
       if (req.files.model) fs.unlinkSync(req.files.model[0].path);
     }
     next(error);
@@ -100,7 +92,6 @@ export const updatePlanet = async (req, res, next) => {
     if (!planet) {
       // Delete uploaded files if any
       if (req.files) {
-        if (req.files.image) fs.unlinkSync(req.files.image[0].path);
         if (req.files.model) fs.unlinkSync(req.files.model[0].path);
       }
       const error = new Error('Planet not found');
@@ -112,19 +103,6 @@ export const updatePlanet = async (req, res, next) => {
     if (req.body.name) {
       planet.name = req.body.name;
     }
-
-    // Update image if new file uploaded
-    if (req.files && req.files.image) {
-      // Delete old image
-      if (planet.image) {
-        const oldImagePath = path.join('uploads/images', path.basename(planet.image));
-        if (fs.existsSync(oldImagePath)) {
-          fs.unlinkSync(oldImagePath);
-        }
-      }
-      planet.image = `/uploads/images/${req.files.image[0].filename}`;
-    }
-
     // Update model if new file uploaded
     if (req.files && req.files.model) {
       // Delete old model
@@ -145,7 +123,6 @@ export const updatePlanet = async (req, res, next) => {
     });
   } catch (error) {
     if (req.files) {
-      if (req.files.image) fs.unlinkSync(req.files.image[0].path);
       if (req.files.model) fs.unlinkSync(req.files.model[0].path);
     }
     next(error);
@@ -163,14 +140,6 @@ export const deletePlanet = async (req, res, next) => {
       const error = new Error('Planet not found');
       error.statusCode = 404;
       throw error;
-    }
-
-    // Delete image file
-    if (planet.image) {
-      const imagePath = path.join('uploads/images', path.basename(planet.image));
-      if (fs.existsSync(imagePath)) {
-        fs.unlinkSync(imagePath);
-      }
     }
 
     // Delete model file

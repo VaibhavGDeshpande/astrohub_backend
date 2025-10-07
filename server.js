@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import path from 'path';
 import cors from 'cors'
 import { fileURLToPath } from 'url';
-import userRoutes from './src/routes/userRoutes.js';
 import planetRoutes from './src/routes/planetRoutes.js';
 import { errorHandler, notFound } from './src/middleware/errorHandler.js';
 import connectDB from './src/config/db.js';
@@ -34,14 +33,12 @@ app.get('/', (req, res) => {
     message: 'API is running',
     version: '1.0.0',
     endpoints: {
-      users: '/api/users',
       planets: '/api/planets'
     }
   });
 });
 
-// API routes
-app.use('/api/users', userRoutes);
+
 app.use('/api/planets', planetRoutes);
 
 // Error handling middleware (must be last)

@@ -7,9 +7,6 @@ const planetSchema = new mongoose.Schema({
     trim: true,
     unique: true
   },
-  image: {
-    type: String
-  },
   model:{
     type: String
   }
