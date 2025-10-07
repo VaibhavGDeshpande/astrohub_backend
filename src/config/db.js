@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017', {
+    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://deshpandevaibhav1012_db_user:Vaibhav1012@astrohub.qpahf5k.mongodb.net/', {
       dbName: 'astrohub'
     });
     console.log(`MongoDB connected: ${conn.connection.host}`);
